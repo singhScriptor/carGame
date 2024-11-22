@@ -40,8 +40,6 @@ button {
     color: white; /* Optional: change cursor to pointer on hover */
 }
 
-
-
 #leftButton {
     bottom: 20px; /* Align with other buttons */
     left: calc(50% - 60px); /* Adjust position to the left of the center */
@@ -104,9 +102,9 @@ footer {
 /* Responsive Styles for Small Screens */
 @media screen and (max-width: 600px) {
     button {
-        font-size: 25px;/* Font size for small screens */
-        color:white; 
-        margin-bottom: 20px;
+        font-size: 25px; /* Font size for small screens */
+        color: white; 
+        margin-bottom: 25px;
     }
 
     footer {
