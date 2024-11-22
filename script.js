@@ -537,120 +537,69 @@ var isAccelerating = false;  // Flag to track if the accelerator is pressed
 var isTurningLeft = false;   // Flag for turning left
 var isTurningRight = false;  // Flag for turning right
 
-// Event listeners for the buttons
-accelerateButton.addEventListener('mousedown', function() {
-    isAccelerating = true;  // Start accelerating when the button is pressed
-});
-
-accelerateButton.addEventListener('mouseup', function() {
-    isAccelerating = false;  // Stop accelerating when the button is released
-});
-
-accelerateButton.addEventListener('mouseleave', function() {
-    isAccelerating = false;  // Stop accelerating if the button is released outside
-});
-
-leftButton.addEventListener('mousedown', function() {
-    isTurningLeft = true;  // Start turning left when the button is pressed
-});
-
-leftButton.addEventListener('mouseup', function() {
-    isTurningLeft = false;  // Stop turning left when the button is released
-});
-
-rightButton.addEventListener('mousedown', function() {
-    isTurningRight = true;  // Start turning right when the button is pressed
-});
-
-rightButton.addEventListener('mouseup', function() {
-    isTurningRight = false;  // Stop turning right when the button is released
-});
-
-// Modify the calcMovement function to account for button presses
-function calcMovement() {
-    var move = $.state.speed * 0.01,
-        newCurve = 0;
-
-    // Use the "isAccelerating" flag instead of the up arrow key for acceleration
-    if (isAccelerating) {
-        $.state.speed += $.state.car.acc - ($.state.speed * 0.015);  // Increase speed
-    } else if ($.state.speed > 0) {
-        $.state.speed -= $.state.car.friction;  // Apply friction when not accelerating
-    }
-
-    if ($.state.keypress.down && $.state.speed > 0) {
-        $.state.speed -= 1;
-    }
-
-    // Left and right movement based on button presses
-    $.state.xpos -= ($.state.currentCurve * $.state.speed) * 0.005;
-
-    if ($.state.speed) {
-        if (isTurningLeft) {
-            $.state.xpos += (Math.abs($.state.turn) + 7 + ($.state.speed > $.state.car.maxSpeed / 4 ? ($.state.car.maxSpeed - ($.state.speed / 2)) : $.state.speed)) * 0.2;
-            $.state.turn -= 1;
-        }
-
-        if (isTurningRight) {
-            $.state.xpos -= (Math.abs($.state.turn) + 7 + ($.state.speed > $.state.car.maxSpeed / 4 ? ($.state.car.maxSpeed - ($.state.speed / 2)) : $.state.speed)) * 0.2;
-            $.state.turn += 1;
-        }
-
-        if ($.state.turn !== 0 && !isTurningLeft && !isTurningRight) {
-            $.state.turn += $.state.turn > 0 ? -0.25 : 0.25;
-        }
-    }
-
-    $.state.turn = clamp($.state.turn, -5, 5);
-    $.state.speed = clamp($.state.speed, 0, $.state.car.maxSpeed);
-
-    // section
-    $.state.section -= $.state.speed;
-
-    if ($.state.section < 0) {
-        $.state.section = randomRange(1000, 9000);
-
-        newCurve = randomRange(-50, 50);
-
-        if (Math.abs($.state.curve - newCurve) < 20) {
-            newCurve = randomRange(-50, 50);
-        }
-
-        $.state.curve = newCurve;
-    }
-
-    if ($.state.currentCurve < $.state.curve && move < Math.abs($.state.currentCurve - $.state.curve)) {
-        $.state.currentCurve += move;
-    } else if ($.state.currentCurve > $.state.curve && move < Math.abs($.state.currentCurve - $.state.curve)) {
-        $.state.currentCurve -= move;
-    }
-
-    if (Math.abs($.state.xpos) > 550) {
-        $.state.speed *= 0.96;
-    }
-
-    $.state.xpos = clamp($.state.xpos, -650, 650);
+// Function to handle button press (both mouse and touch)
+function handleButtonPress(event, action) {
+    // Prevent default behavior for touch events to avoid scrolling
+    event.preventDefault();
+    action(true);
 }
 
+// Function to handle button release (both mouse and touch)
+function handleButtonRelease(event, action) {
+    // Prevent default behavior for touch events to avoid scrolling
+    event.preventDefault();
+    action(false);
+}
 
-
-var isTurningLeft = false;
-var isTurningRight = false;
-
-leftButton.addEventListener('mousedown', function() {
-    isTurningLeft = true;
+// Event listeners for the accelerate button
+accelerateButton.addEventListener('mousedown', function(event) {
+    handleButtonPress(event, function(value) { isAccelerating = value; });
+});
+accelerateButton.addEventListener('mouseup', function(event) {
+    handleButtonRelease(event, function(value) { isAccelerating = value; });
+});
+accelerateButton.addEventListener('mouseleave', function(event) {
+    handleButtonRelease(event, function(value) { isAccelerating = value; });
 });
 
-leftButton.addEventListener('mouseup', function() {
-    isTurningLeft = false;
+// Touch event listeners for mobile
+accelerateButton.addEventListener('touchstart', function(event) {
+    handleButtonPress(event, function(value) { isAccelerating = value; });
+});
+accelerateButton.addEventListener('touchend', function(event) {
+    handleButtonRelease(event, function(value) { isAccelerating = value; });
 });
 
-rightButton.addEventListener('mousedown', function() {
-    isTurningRight = true;
+// Event listeners for the left turn button
+leftButton.addEventListener('mousedown', function(event) {
+    handleButtonPress(event, function(value) { isTurningLeft = value; });
+});
+leftButton.addEventListener('mouseup', function(event) {
+    handleButtonRelease(event, function(value) { isTurningLeft = value; });
 });
 
-rightButton.addEventListener('mouseup', function() {
-    isTurningRight = false;
+// Touch event listeners for mobile
+leftButton.addEventListener('touchstart', function(event) {
+    handleButtonPress(event, function(value) { isTurningLeft = value; });
+});
+leftButton.addEventListener('touchend', function(event) {
+    handleButtonRelease(event, function(value) { isTurningLeft = value; });
+});
+
+// Event listeners for the right turn button
+rightButton.addEventListener('mousedown', function(event) {
+    handleButtonPress(event, function(value) { isTurningRight = value; });
+});
+rightButton.addEventListener('mouseup', function(event) {
+    handleButtonRelease(event, function(value) { isTurningRight = value; });
+});
+
+// Touch event listeners for mobile
+rightButton.addEventListener('touchstart', function(event) {
+    handleButtonPress(event, function(value) { isTurningRight = value; });
+});
+rightButton.addEventListener('touchend', function(event) {
+    handleButtonRelease(event, function(value) { isTurningRight = value; });
 });
 
 // Update calcMovement to include the new turning states
@@ -712,6 +661,8 @@ function calcMovement() {
 
     $.state.xpos = clamp($.state.xpos, -650, 650);
 }
+
+
 
 
 
