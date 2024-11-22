@@ -1,0 +1,88 @@
+body {
+    background-color:lightgrey ;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+  }
+  
+  canvas {
+    border-radius: .4em;
+  }
+
+
+/* Footer Styling */
+footer {
+    width: 60px; /* Set width for the vertical footer */
+    height: 100vh; /* Full height of the viewport */
+    color: white; /* Text color */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Center align vertically */
+    align-items: center; /* Center align horizontally */
+    position: fixed; /* Fix the footer to the right side */
+    right: 0; /* Align to the right */
+    top: 0;
+}
+
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    padding: 20px 0;
+}
+
+.footer-content p {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    margin: 10px;
+    text-align: left;
+    writing-mode: horizontal-tb; /* Keep text horizontal */
+    transform: rotate(0); /* No rotation */
+}
+
+.footer-content .social-links {
+    display: flex;
+    flex-direction: column; /* Align icons vertically */
+    gap: 20px; /* Space between social icons */
+}
+
+.footer-content a {
+    color: black; /* Icon color */
+    text-decoration: none;
+    font-size: 24px; /* Icon size */
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 600px) {
+    footer {
+        width: 100%; /* Full width for small screens */
+        height: auto; /* Adjust height */
+        position: static; /* Make the footer static */
+    }
+
+    .footer-content {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .footer-content p {
+        writing-mode: horizontal-tb; /* Ensure text direction is horizontal */
+        transform: rotate(0);
+        margin-bottom: 0;
+    }
+
+    .footer-content .social-links {
+        flex-direction: column; /* Align icons horizontally */
+        gap: 10px; /* Reduce gap for smaller screens */
+    }
+
+    .footer-content a {
+        font-size: 20px; /* Adjust icon size for smaller screens */
+    }
+}
